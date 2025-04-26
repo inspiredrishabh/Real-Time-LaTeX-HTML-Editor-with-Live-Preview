@@ -1,38 +1,80 @@
 .app-container {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Resize handle styling */
-  .resize-handle {
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .resize-handle:hover {
-    background-color: #e0e0e0;
-  }
-  
-  .handle-line {
-    width: 4px;
-    height: 30px;
-    border-radius: 2px;
-    background-color: #ccc;
-  }
-  
-  .resize-handle:hover .handle-line {
-    background-color: #0078df;
-  }
-  
-  /* For vertical resize handles */
-  [data-panel-group-direction="vertical"] .resize-handle {
-    height: 8px;
-    width: 100%;
-  }
-  
-  [data-panel-group-direction="vertical"] .handle-line {
-    width: 30px;
-    height: 4px;
-  }
+  display: flex;
+  flex-direction: column;
+}
+
+/* Resize handle styling */
+.resize-handle {
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.resize-handle:hover {
+  background-color: #e0e0e0;
+}
+
+.handle-line {
+  width: 4px;
+  height: 30px;
+  border-radius: 2px;
+  background-color: #ccc;
+}
+
+.resize-handle:hover .handle-line {
+  background-color: #0078df;
+}
+
+/* For vertical resize handles */
+[data-panel-group-direction="vertical"] .resize-handle {
+  height: 8px;
+  width: 100%;
+}
+
+[data-panel-group-direction="vertical"] .handle-line {
+  width: 30px;
+  height: 4px;
+}
+
+/* HTML Preview container styles */
+.preview-container {
+  overflow-x: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-break: keep-all;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Subscript and superscript styling */
+sub,
+.subscript {
+  vertical-align: sub;
+  font-size: smaller;
+  line-height: 0;
+}
+
+sup,
+.superscript {
+  vertical-align: super;
+  font-size: smaller;
+  line-height: 0;
+}
+
+.katex {
+  font-size: 1.1em;
+}
+
+/* Toolbar enhancements */
+.symbol-button {
+  transition: all 0.2s;
+}
+.symbol-button:hover {
+  transform: scale(1.1);
+}
