@@ -2,7 +2,6 @@
 
 A powerful web application that allows you to write mathematical expressions and automatically converts them to LaTeX and HTML outputs with proper rendering.
 
-
 ## Features
 
 - **Interactive Math Editor**: Write mathematical expressions with an intuitive toolbar
@@ -31,12 +30,14 @@ A powerful web application that allows you to write mathematical expressions and
 ### Installation
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/inspiredrishabh/Real-Time-LaTeX-HTML-Editor-with-Live-Preview
 cd latex/frontend
 ```
 
 2. Install dependencies
+
 ```bash
 npm install
 # or
@@ -44,6 +45,7 @@ yarn
 ```
 
 3. Start the development server
+
 ```bash
 npm run dev
 # or
@@ -57,10 +59,11 @@ yarn dev
 1. **Writing Expressions**: Type mathematical expressions in the left panel. Use the toolbar to insert special symbols.
 
 2. **Using LaTeX Symbols**:
+
    - Greek letters: `\alpha`, `\beta`, `\gamma`
    - Fractions: `\frac{numerator}{denominator}`
    - Subscripts and superscripts: `x_2` and `x^2`
-   - Square roots: `\sqrt{x}` 
+   - Square roots: `\sqrt{x}`
 
 3. **Editing LaTeX**: If you need to manually adjust the generated LaTeX, use the dedicated panel in the top-right section.
 
@@ -98,7 +101,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
 
 ## Acknowledgments
 
