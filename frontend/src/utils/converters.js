@@ -45,9 +45,23 @@ export function convertToHTML(latexCode) {
   <title>Math Document</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <style>
-    body { font-family: "Computer Modern", serif; margin: 2em; line-height: 1.5; }
-    .math { text-align: center; margin: 1em 0; font-size: 1.2em; }
-    .math-inline { padding: 0 0.2em; }
+    body { 
+      font-family: "Computer Modern", serif; 
+      margin: 2em; 
+      line-height: 1.5; 
+    }
+    .math { 
+      text-align: center; 
+      margin: 1em 0;
+      font-size: 1.2em;
+    }
+    .math-inline { 
+      padding: 0 0.2em; 
+    }
+    pre {
+      white-space: pre-wrap;
+      font-family: inherit;
+    }
   </style>
 </head>
 <body>`;
@@ -56,19 +70,26 @@ export function convertToHTML(latexCode) {
     // Process math expressions
     let htmlBody = '';
     
-    // Simple detection for equation vs text
-    if (content.includes('=') || content.includes('\\frac') || content.includes('\\sum')) {
+    // Check if content contains math expressions
+    if (content.includes('=') || 
+        content.includes('\\frac') || 
+        content.includes('\\sum') ||
+        content.includes('^') ||
+        content.includes('_')) {
       try {
+        // Preserve spaces in the rendered output using KaTeX
         const rendered = katex.renderToString(content.trim(), { 
           throwOnError: false,
           displayMode: true
         });
         htmlBody = `<div class="math">${rendered}</div>`;
       } catch (err) {
-        htmlBody = `<p>${content}</p>`;
+        // For errors, preserve spaces using pre tag
+        htmlBody = `<pre>${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
       }
     } else {
-      htmlBody = `<p>${content}</p>`;
+      // For regular text, preserve spaces using pre tag
+      htmlBody = `<pre>${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
     }
     
     return htmlStart + htmlBody + htmlEnd;
