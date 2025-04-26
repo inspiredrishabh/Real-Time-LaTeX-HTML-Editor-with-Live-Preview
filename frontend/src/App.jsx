@@ -37,9 +37,9 @@ export default function App() {
               <div className="mt-4">
                 <div className="p-3 border rounded shadow-sm bg-gray-50">
                   <h3 className="font-medium text-gray-700">LaTeX Preview</h3>
-                  <div className="mt-2 p-2 bg-white rounded">
+                  <pre className="mt-2 p-2 bg-white rounded whitespace-pre-wrap font-mono text-sm overflow-auto max-h-40">
                     {latexCode.split('\\begin{document}')[1]?.split('\\end{document}')[0] || ''}
-                  </div>
+                  </pre>
                 </div>
                 
                 <div className="p-3 border rounded shadow-sm bg-gray-50 mt-4">
