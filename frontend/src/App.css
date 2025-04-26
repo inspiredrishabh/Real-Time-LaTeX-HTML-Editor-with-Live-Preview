@@ -78,3 +78,29 @@ sup,
 .symbol-button:hover {
   transform: scale(1.1);
 }
+
+/* Toolbar subscript/superscript buttons */
+.toolbar-button-sub,
+.toolbar-button-sup {
+  padding: 5px 8px;
+  border-radius: 4px;
+  margin: 0 3px;
+  cursor: pointer;
+}
+
+.toolbar-button-sub.active,
+.toolbar-button-sup.active {
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+}
+
+/* Add icons for better visibility */
+.toolbar-button-sub::before {
+  content: "ₓ";
+  font-weight: bold;
+}
+
+.toolbar-button-sup::before {
+  content: "ˣ";
+  font-weight: bold;
+}
