@@ -30,17 +30,76 @@ export default function App() {
         ?.split("\\end{document}")[0]
         ?.trim() || "";
 
-    // Render the LaTeX with KaTeX
+    // Check if content contains math delimiters
+    const hasMathDelimiters = /\$.*?\$/.test(latexContent);
+
+    // Render the LaTeX with KaTeX based on content type
     try {
-      const rendered = katex.renderToString(latexContent, {
-        throwOnError: false,
-        displayMode: true,
-      });
-      setRenderedLatex(rendered);
+      if (hasMathDelimiters) {
+        // Handle mixed content - similar to HTML converter
+        let renderedOutput = "";
+        // Better parser for dollar sign delimiters
+        let inMath = false;
+        let currentText = "";
+        let mathText = "";
+
+        for (let i = 0; i < latexContent.length; i++) {
+          if (latexContent[i] === "$") {
+            if (inMath) {
+              // End math section - render it
+              try {
+                const rendered = katex.renderToString(mathText.trim(), {
+                  throwOnError: false,
+                  displayMode: false,
+                });
+                renderedOutput += `<span class="math-inline">${rendered}</span>`;
+              } catch (err) {
+                renderedOutput += `<span style="color: red;">[Math Error: ${mathText}]</span>`;
+              }
+              mathText = "";
+              inMath = false;
+            } else {
+              // End text section, start math
+              if (currentText) {
+                renderedOutput += currentText;
+                currentText = "";
+              }
+              inMath = true;
+            }
+          } else {
+            // Add to current buffer (text or math)
+            if (inMath) {
+              mathText += latexContent[i];
+            } else {
+              currentText += latexContent[i];
+            }
+          }
+        }
+
+        // Add any remaining text
+        if (currentText) {
+          renderedOutput += currentText;
+        }
+
+        setRenderedLatex(
+          `<div class="preview-mixed-content">${renderedOutput}</div>`
+        );
+      } else {
+        // Pure math content - render as display math
+        const rendered = katex.renderToString(latexContent.trim(), {
+          throwOnError: false,
+          displayMode: true,
+          macros: {
+            "\\;": "\\space",
+            "\\:": "\\space",
+          },
+        });
+        setRenderedLatex(rendered);
+      }
     } catch (error) {
       console.error("LaTeX rendering error:", error);
       setRenderedLatex(
-        '<span style="color: red;">LaTeX rendering error</span>'
+        `<span style="color: red;">LaTeX rendering error: ${error.message}</span>`
       );
     }
   }, [latexCode]);
@@ -63,32 +122,42 @@ export default function App() {
                   <h3 className="font-medium text-gray-700">LaTeX Preview</h3>
 
                   <div className="mt-2 p-3 bg-white rounded border">
-                    <div className="mb-3 pb-2 border-b">
-                      <h4 className="text-sm font-medium text-gray-600">
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-600 mb-2">
                         Rendered Output:
                       </h4>
-                      <div className="mt-1 p-2 bg-gray-50 rounded flex items-center justify-center">
+                      <div className="p-2 bg-gray-50 rounded latex-preview-container">
                         <div
+                          className="latex-preview-content"
                           dangerouslySetInnerHTML={{ __html: renderedLatex }}
                         />
                       </div>
                     </div>
 
-                    <h4 className="text-sm font-medium text-gray-600">
-                      Raw LaTeX Code:
-                    </h4>
-                    <pre className="mt-1 p-2 bg-gray-50 rounded whitespace-pre-wrap font-mono text-sm overflow-auto max-h-40">
-                      {latexCode
-                        .split("\\begin{document}")[1]
-                        ?.split("\\end{document}")[0] || ""}
-                    </pre>
+                    <div className="mt-3 pt-3 border-t">
+                      <h4 className="text-sm font-medium text-gray-600 mb-1">
+                        Raw LaTeX Code:
+                      </h4>
+                      <pre className="p-2 bg-gray-50 rounded whitespace-pre-wrap font-mono text-sm overflow-auto max-h-40">
+                        {latexCode
+                          .split("\\begin{document}")[1]
+                          ?.split("\\end{document}")[0] || ""}
+                      </pre>
+                    </div>
+                  </div>
+
+                  <div className="mt-2 text-xs text-gray-500">
+                    <p>
+                      Tip: Use $ signs to mark math expressions in text, like:
+                      "The formula is $E=mc^2$ where..."
+                    </p>
                   </div>
                 </div>
 
                 <div className="p-3 border rounded shadow-sm bg-gray-50 mt-4">
                   <h3 className="font-medium text-gray-700">HTML Preview</h3>
                   <div
-                    className="mt-2 p-2 bg-white rounded"
+                    className="mt-2 p-2 bg-white rounded html-preview-container"
                     dangerouslySetInnerHTML={{ __html: htmlCode }}
                   />
                 </div>

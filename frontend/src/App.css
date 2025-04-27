@@ -37,12 +37,50 @@
   height: 4px;
 }
 
-/* HTML Preview container styles */
+/* Better HTML Preview container styles */
 .preview-container {
   overflow-x: auto;
-  max-width: 100%;
+  width: 100%;
   box-sizing: border-box;
   padding: 10px;
+}
+
+/* LaTeX Preview container */
+.latex-preview-container {
+  overflow-x: auto;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+.latex-preview-content {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* HTML Preview container */
+.html-preview-container {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 300px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+/* Mixed content preview styles */
+.preview-mixed-content {
+  display: block;
+  width: 100%;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.preview-mixed-content .math-inline {
+  padding: 0 0.2em;
 }
 
 pre {
@@ -67,8 +105,36 @@ sup,
   line-height: 0;
 }
 
+/* Better KaTeX styling */
 .katex {
-  font-size: 1.1em;
+  font-size: 1.1em !important;
+}
+
+.katex .mspace {
+  margin-right: 0.2em !important;
+}
+
+.katex-display {
+  margin: 0.5em 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.katex-html {
+  white-space: normal !important;
+}
+
+.katex .mord + .mord,
+.katex .mord + .mbin,
+.katex .mbin + .mord,
+.katex .mrel + .mord,
+.katex .mord + .mrel {
+  margin-left: 0.15em !important;
+}
+
+/* Force spaces to be more visible */
+.katex .mspace:not(.mthinspace):not(.mmediumspace):not(.mthickspace) {
+  width: 0.3em !important;
 }
 
 /* Toolbar enhancements */
