@@ -2,10 +2,19 @@ import { useCallback, useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { html } from "@codemirror/lang-html";
 
+/**
+ * HTMLPanel Component
+ *
+ * Ye component HTML code ko display aur edit karne ke liye hai.
+ * User yahan se HTML copy ya download bhi kar sakta hai.
+ */
 export default function HTMLPanel({ htmlCode, onChange }) {
+  // Editor value change hone par parent ko update karo
   const handleChange = useCallback((val) => onChange(val), [onChange]);
+  // Copy button ka status
   const [copyStatus, setCopyStatus] = useState("");
 
+  // HTML file download karne ka function
   const downloadHTML = () => {
     const blob = new Blob([htmlCode], { type: "text/html" });
     const url = URL.createObjectURL(blob);
@@ -16,12 +25,11 @@ export default function HTMLPanel({ htmlCode, onChange }) {
     URL.revokeObjectURL(url);
   };
 
+  // Sirf essential HTML content copy karne ka function
   const copyEssentialHTML = async () => {
     try {
-      // Extract the essential HTML content only
       let essentialContent = "";
-
-      // Look for the math content or paragraph
+      // Math ya paragraph content dhoondo
       const mathMatch = htmlCode.match(/<div class="math">([\s\S]*?)<\/div>/);
       const paragraphMatch = htmlCode.match(/<p>([\s\S]*?)<\/p>/);
 
@@ -30,12 +38,11 @@ export default function HTMLPanel({ htmlCode, onChange }) {
       } else if (paragraphMatch) {
         essentialContent = paragraphMatch[0];
       } else {
-        // Fallback - try to extract content between body tags
+        // Fallback: body ke andar ka content
         const bodyMatch = htmlCode.match(/<body>([\s\S]*?)<\/body>/);
         if (bodyMatch) {
           essentialContent = bodyMatch[1].trim();
         } else {
-          // No specific content found, use the whole code
           essentialContent = htmlCode;
         }
       }
@@ -52,6 +59,7 @@ export default function HTMLPanel({ htmlCode, onChange }) {
 
   return (
     <div className="h-full flex flex-col bg-white p-4">
+      {/* Header with copy/download buttons */}
       <div className="flex justify-between mb-2">
         <h2 className="text-lg font-bold">HTML Code</h2>
         <div className="flex space-x-2">
@@ -69,7 +77,7 @@ export default function HTMLPanel({ htmlCode, onChange }) {
           </button>
         </div>
       </div>
-
+      {/* Code editor */}
       <CodeMirror
         value={htmlCode}
         height="calc(100% - 40px)"
