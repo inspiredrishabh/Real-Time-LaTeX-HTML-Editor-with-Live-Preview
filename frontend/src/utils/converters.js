@@ -1,52 +1,59 @@
 import katex from "katex";
 
-// Convert input to LaTeX
+/**
+ * convertToLatex
+ *
+ * Ye function user ke input ko LaTeX document mein convert karta hai.
+ * - Agar input empty hai to ek blank LaTeX document return karta hai.
+ * - Agar input mein math delimiters ($...$) nahi hain, to smartly math parts ko detect karke wrap karta hai.
+ * - Mixed content ya pure math ko LaTeX format mein convert karta hai.
+ */
 export function convertToLatex(input) {
   try {
-    // Check if input is empty
+    // Agar input empty hai to blank LaTeX document return karo
     if (!input || !input.trim()) {
       return "\\documentclass{article}\n\\begin{document}\n\n\\end{document}";
     }
 
-    // Check if input already contains math delimiters
+    // Dekho input mein already $...$ math delimiters hain ya nahi
     const hasMathDelimiters = /\$.*?\$/.test(input);
     let processedInput = input;
 
     if (!hasMathDelimiters) {
-      // Detect if input might contain math expressions
+      // Math expressions dhoondhne ke liye pattern
       const potentialMathPattern =
         /[=\+\-\*\/\^\_]|sin|cos|tan|log|sqrt|frac|lim|\\\w+/;
       const containsMath = potentialMathPattern.test(input);
 
-      // Check if it contains words (spaces between letters)
+      // Dekho input mein words bhi hain ya nahi (mixed content)
       const containsWords = /[a-zA-Z]+ [a-zA-Z]+/.test(input);
 
       if (containsMath && containsWords) {
-        // Mixed content - try to auto-detect math parts
+        // Mixed content hai, math parts ko $...$ se wrap karo
         processedInput = processedInput
-          // Mark equations
+          // Equations ko mark karo
           .replace(/([a-z0-9]+)\s*=\s*([a-z0-9\+\-\*\/\^\(\)]+)/gi, "$ $& $")
-          // Mark common math expressions
+          // Common math expressions ko mark karo
           .replace(/\b(sin|cos|tan|log|ln)\s*\(([^)]+)\)/g, "$ $& $")
           .replace(/\b(sin|cos|tan|log|ln)\^[0-9]+/g, "$ $& $")
           .replace(/\\(frac|sqrt|sum|int|lim|inf)/g, "$ \\$1 $")
-          // Mark variables with exponents or subscripts
+          // Exponents ya subscripts ko bhi mark karo
           .replace(/([a-z0-9])[\^\_][a-z0-9]/gi, "$ $& $")
-          // Clean up duplicate/adjacent delimiters
+          // Duplicate/adjacent delimiters ko clean karo
           .replace(/\$\s+\$/g, "$")
           .replace(/(\$[^$]*)\$\s*\$([^$]*\$)/g, "$1$2");
       } else if (!containsWords) {
-        // Likely pure math - wrap everything
+        // Pure math hai, sabko ek hi $...$ mein wrap karo
         processedInput = `$ ${processedInput} $`;
       }
-      // else pure text - no need for math delimiters
+      // Agar pure text hai to kuch mat karo
     }
 
-    // Process the input - handling math parts separately
+    // Input ko process karo, math aur text parts alag handle karo
     let latexContent = "";
 
     if (hasMathDelimiters || processedInput.includes("$")) {
-      // Process mixed content with math delimiters
+      // Mixed content ya math delimiters ke saath process karo
       const parts = processedInput.split(/(\$[^$]*?\$)/g);
 
       for (let part of parts) {
@@ -54,52 +61,52 @@ export function convertToLatex(input) {
         if (!part) continue;
 
         if (part.startsWith("$") && part.endsWith("$")) {
-          // Math content - process and keep delimiters
+          // Math content hai, usko process karo aur delimiters ke saath rakho
           let mathContent = part.slice(1, -1).trim();
 
-          // Process math content
+          // Math content ko aur process karo (functions, exponents, etc.)
           mathContent = mathContent
-            // Handle functions with superscripts
+            // Functions ke superscripts handle karo
             .replace(/sin\^(\d+|\{[^}]+\})/g, "\\sin^{$1}")
             .replace(/cos\^(\d+|\{[^}]+\})/g, "\\cos^{$1}")
             .replace(/tan\^(\d+|\{[^}]+\})/g, "\\tan^{$1}")
-            // Handle regular functions
+            // Functions ko LaTeX mein convert karo
             .replace(/([^\\]|^)sin\(/g, "$1\\sin(")
             .replace(/([^\\]|^)cos\(/g, "$1\\cos(")
             .replace(/([^\\]|^)tan\(/g, "$1\\tan(")
             .replace(/([^\\]|^)log\(/g, "$1\\log(")
             .replace(/([^\\]|^)ln\(/g, "$1\\ln(")
             .replace(/([^\\]|^)sqrt\(([^)]+)\)/g, "$1\\sqrt{$2}")
-            // Handle exponents and subscripts
+            // Exponents aur subscripts
             .replace(/\^(\d)/g, "^{$1}")
             .replace(/\^([a-zA-Z])/g, "^{$1}")
             .replace(/\_(\d)/g, "_{$1}")
             .replace(/\_([a-zA-Z])/g, "_{$1}")
-            // Handle multiplication
+            // Multiplication ko LaTeX style mein karo
             .replace(/(\d+|\))(\()/g, "$1 \\cdot $2")
             .replace(/(\d+)([a-zA-Z])/g, "$1 \\cdot $2");
 
           latexContent += `$${mathContent}$`;
         } else {
-          // Regular text - keep as is
+          // Normal text hai, waise hi add karo
           latexContent += part;
         }
       }
     } else {
-      // Regular text or pure math without delimiters
+      // Pure text ya pure math (delimiters ke bina)
       latexContent = processedInput
-        // Handle exponents and subscripts
+        // Exponents aur subscripts
         .replace(/\^2/g, "^{2}")
         .replace(/\^(\w)/g, "^{$1}")
         .replace(/([a-zA-Z]+)_(\w+)/g, "$1_{$2}")
-        // Handle functions
+        // Functions
         .replace(/([^\\])sqrt\(([^)]+)\)/g, "$1\\sqrt{$2}")
-        // Handle multiplication
+        // Multiplication
         .replace(/(\d+|\))(\()/g, "$1 \\cdot $2")
         .replace(/(\d+)([a-zA-Z])/g, "$1 \\cdot $2");
     }
 
-    // Wrap in LaTeX document structure
+    // LaTeX document structure mein wrap karo
     return `\\documentclass{article}
 \\usepackage{amsmath}
 \\usepackage{amssymb}
@@ -115,20 +122,27 @@ ${latexContent}
   }
 }
 
-// Convert LaTeX to HTML with KaTeX
+/**
+ * convertToHTML
+ *
+ * Ye function LaTeX code ko HTML mein convert karta hai, KaTeX ka use karke.
+ * - Document structure se sirf main content nikalta hai.
+ * - Math aur text ko alag-alag handle karta hai.
+ * - KaTeX se render karke HTML return karta hai.
+ */
 export function convertToHTML(latexCode) {
   try {
-    // Extract content between document tags
+    // Document ke andar ka content nikaalo
     const content =
       latexCode
         .split("\\begin{document}")[1]
         ?.split("\\end{document}")[0]
         ?.trim() || "";
 
-    // Check if content contains math delimiters
+    // Dekho math delimiters hain ya nahi
     const hasMathDelimiters = /\$.*?\$/.test(content);
 
-    // Basic HTML structure
+    // HTML ka basic structure
     const htmlStart = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -186,15 +200,15 @@ export function convertToHTML(latexCode) {
 <body>`;
     const htmlEnd = `</body></html>`;
 
-    // Handle content based on type
+    // Content ko type ke hisaab se handle karo
     let htmlBody = "";
 
     if (hasMathDelimiters) {
-      // Mixed content with math delimiters
+      // Mixed content hai, math delimiters ke saath
       try {
         htmlBody = "<p>";
 
-        // Better parser for dollar sign delimiters
+        // Dollar sign delimiters ka parser
         let inMath = false;
         let currentText = "";
         let mathText = "";
@@ -202,7 +216,7 @@ export function convertToHTML(latexCode) {
         for (let i = 0; i < content.length; i++) {
           if (content[i] === "$") {
             if (inMath) {
-              // End math section - render it
+              // Math section end ho gaya, render karo
               try {
                 const rendered = katex.renderToString(mathText.trim(), {
                   throwOnError: false,
@@ -215,7 +229,7 @@ export function convertToHTML(latexCode) {
               mathText = "";
               inMath = false;
             } else {
-              // End text section, start math
+              // Text section end, ab math start karo
               if (currentText) {
                 htmlBody += currentText
                   .replace(/</g, "&lt;")
@@ -225,7 +239,7 @@ export function convertToHTML(latexCode) {
               inMath = true;
             }
           } else {
-            // Add to current buffer (text or math)
+            // Buffer mein add karo (text ya math)
             if (inMath) {
               mathText += content[i];
             } else {
@@ -234,7 +248,7 @@ export function convertToHTML(latexCode) {
           }
         }
 
-        // Add any remaining text
+        // Jo text bacha hai, usko bhi add karo
         if (currentText) {
           htmlBody += currentText.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
@@ -250,12 +264,12 @@ export function convertToHTML(latexCode) {
                      .replace(/>/g, "&gt;")}</pre>`;
       }
     } else {
-      // Check if it's likely math content
+      // Dekho math content hai ya plain text
       const mathPattern = /[=\+\-\*\/\^\_]|\\(frac|sum|int|sqrt|lim)/;
       const isMathContent = mathPattern.test(content);
 
       if (isMathContent) {
-        // Render as math
+        // Math content hai, KaTeX se render karo
         try {
           const rendered = katex.renderToString(content.trim(), {
             throwOnError: false,
@@ -276,7 +290,7 @@ export function convertToHTML(latexCode) {
                        .replace(/>/g, "&gt;")}</pre>`;
         }
       } else {
-        // Render as plain text
+        // Plain text hai, as it is render karo
         htmlBody = `<p>${content
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;")}</p>`;
