@@ -151,10 +151,10 @@ export function convertToHTML(latexCode) {
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <style>
     body { 
-      font-family: "Computer Modern", serif; 
-      margin: 2em auto;
+      font-family: "Computer Modern", serif;
       line-height: 1.6;
-      padding: 0 1em;
+      padding: 0em;
+      margin: 0em;
     }
     p {
       margin: 0.8em 0;
