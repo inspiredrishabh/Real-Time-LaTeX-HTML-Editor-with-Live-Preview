@@ -25,49 +25,30 @@ export default function HTMLPanel({ htmlCode, onChange }) {
     URL.revokeObjectURL(url);
   };
 
-  // Sirf essential HTML content copy karne ka function
-  const copyEssentialHTML = async () => {
+  // Simplified function to copy the entire HTML content
+  const copyFullHTML = async () => {
     try {
-      let essentialContent = "";
-      // Math ya paragraph content dhoondo
-      const mathMatch = htmlCode.match(/<div class="math">([\s\S]*?)<\/div>/);
-      const paragraphMatch = htmlCode.match(/<p>([\s\S]*?)<\/p>/);
-
-      if (mathMatch) {
-        essentialContent = mathMatch[0];
-      } else if (paragraphMatch) {
-        essentialContent = paragraphMatch[0];
-      } else {
-        // Fallback: body ke andar ka content
-        const bodyMatch = htmlCode.match(/<body>([\s\S]*?)<\/body>/);
-        if (bodyMatch) {
-          essentialContent = bodyMatch[1].trim();
-        } else {
-          essentialContent = htmlCode;
-        }
-      }
-
-      await navigator.clipboard.writeText(essentialContent);
+      await navigator.clipboard.writeText(htmlCode);
       setCopyStatus("Copied!");
       setTimeout(() => setCopyStatus(""), 2000);
     } catch (err) {
       console.error("Failed to copy:", err);
-      setCopyStatus("Failed to copy");
+      setCopyStatus("Failed");
       setTimeout(() => setCopyStatus(""), 2000);
     }
   };
 
   return (
-    <div className="h-full flex flex-col bg-white p-4">
+    <div className="h-full flex flex-col bg-white p-4 overflow-hidden">
       {/* Header with copy/download buttons */}
-      <div className="flex justify-between mb-2">
+      <div className="flex flex-wrap justify-between items-center mb-3 gap-2">
         <h2 className="text-lg font-bold">HTML Code</h2>
         <div className="flex space-x-2">
           <button
-            onClick={copyEssentialHTML}
-            className="px-2 py-1 bg-blue-600 text-white text-sm rounded relative"
+            onClick={copyFullHTML}
+            className="px-2 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
           >
-            {copyStatus ? copyStatus : "Copy Content"}
+            {copyStatus ? copyStatus : "Copy Full HTML"}
           </button>
           <button
             onClick={downloadHTML}
@@ -77,14 +58,21 @@ export default function HTMLPanel({ htmlCode, onChange }) {
           </button>
         </div>
       </div>
-      {/* Code editor */}
-      <CodeMirror
-        value={htmlCode}
-        height="calc(100% - 40px)"
-        extensions={[html()]}
-        onChange={handleChange}
-        className="border rounded"
-      />
+      {/* Enhanced scrollable code editor */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <CodeMirror
+          value={htmlCode}
+          height="100%"
+          extensions={[html()]}
+          onChange={handleChange}
+          className="border rounded overflow-auto flex-1"
+          basicSetup={{
+            lineNumbers: true,
+            highlightActiveLine: true,
+            foldGutter: true,
+          }}
+        />
+      </div>
     </div>
   );
 }
