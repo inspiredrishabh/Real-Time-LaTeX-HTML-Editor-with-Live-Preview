@@ -2,13 +2,22 @@ import { useCallback, useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 
+/**
+ * LaTeXPanel Component
+ *
+ * Ye component LaTeX code ko display aur edit karne ke liye hai.
+ * User yahan se LaTeX code copy bhi kar sakta hai.
+ */
 export default function LaTeXPanel({ latexCode, onChange }) {
+  // Editor value change hone par parent ko update karo
   const handleChange = useCallback((val) => onChange(val), [onChange]);
+  // Copy button ka status
   const [copyStatus, setCopyStatus] = useState("");
 
+  // Sirf essential LaTeX content copy karne ka function
   const copyEssentialLatex = async () => {
     try {
-      // Extract only the essential LaTeX content without the document structure
+      // Document structure hata ke sirf main content copy karo
       const contentMatch =
         latexCode
           .split("\\begin{document}")[1]
@@ -27,6 +36,7 @@ export default function LaTeXPanel({ latexCode, onChange }) {
 
   return (
     <div className="h-full flex flex-col bg-white p-4">
+      {/* Header with copy button */}
       <div className="flex justify-between mb-2">
         <h2 className="text-lg font-bold">LaTeX Code</h2>
         <button
@@ -36,7 +46,7 @@ export default function LaTeXPanel({ latexCode, onChange }) {
           {copyStatus ? copyStatus : "Copy LaTeX"}
         </button>
       </div>
-
+      {/* Code editor */}
       <CodeMirror
         value={latexCode}
         height="calc(100% - 40px)"
