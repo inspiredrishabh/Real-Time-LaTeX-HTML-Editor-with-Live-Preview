@@ -71,22 +71,33 @@ yarn dev
 
 ## Project Structure
 
-```
-frontend/
-├── src/
-│   ├── components/
-│   │   ├── HTMLPanel.jsx      # HTML output display and editing
-│   │   ├── LaTeXPanel.jsx     # LaTeX code editing component
-│   │   ├── MathEditor.jsx     # Main input editor
-│   │   └── MathToolbar.jsx    # Symbol insertion toolbar
-│   ├── utils/
-│   │   └── converters.js      # Conversion logic for LaTeX and HTML
-│   ├── App.jsx               # Main application layout
-│   ├── main.jsx              # Application entry point
-│   └── index.css             # Global styles
-└── public/
-    └── ...                   # Public assets
-```
+├── components\
+│   ├── common\             # Common UI components
+│   │   ├── IconButton.jsx
+│   │   ├── PanelContainer.jsx
+│   │   └── SectionHeader.jsx
+│   ├── editor\             # Editor-specific components
+│   │   ├── HTMLEditorPanel.jsx
+│   │   └── RawLatexOutput.jsx
+│   ├── icons\              # Icon components
+│   │   └── index.jsx
+│   ├── layout\             # Layout components
+│   │   └── Header.jsx
+│   └── preview\            # Preview components
+│       ├── HTMLPreview.jsx
+│       └── LaTeXPreview.jsx
+├── constants\              # Application constants
+│   └── index.js
+├── contexts\               # React contexts
+│   └── LatexContext.jsx
+├── hooks\                  # Custom hooks
+│   ├── useClipboard.js
+│   └── useLatexRenderer.js
+├── utils\                  # Utility functions
+│   └── latexUtils.js
+└── views\                  # Main view components
+    ├── HTMLView.jsx
+    └── LatexView.jsx
 
 ## Contributing
 

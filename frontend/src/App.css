@@ -1,19 +1,20 @@
+/* Core container */
 .app-container {
   display: flex;
   flex-direction: column;
 }
 
-/* Resize handle styling */
+/* Resize handle */
 .resize-handle {
-  background-color: #f0f0f0;
+  background-color: #f7f7f7;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .resize-handle:hover {
-  background-color: #e0e0e0;
+  background-color: #eaeaea;
 }
 
 .handle-line {
@@ -21,14 +22,14 @@
   height: 30px;
   border-radius: 2px;
   background-color: #ccc;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .resize-handle:hover .handle-line {
-  background-color: #0078df;
+  background-color: #0066cc;
 }
 
-/* For vertical resize handles */
+/* Vertical resize handles */
 [data-panel-group-direction="vertical"] .resize-handle {
   height: 8px;
   width: 100%;
@@ -39,7 +40,7 @@
   height: 4px;
 }
 
-/* Better HTML Preview container styles */
+/* Preview containers */
 .preview-container {
   overflow-x: auto;
   width: 100%;
@@ -47,7 +48,7 @@
   padding: 10px;
 }
 
-/* LaTeX Preview container */
+/* LaTeX Preview */
 .latex-preview-container {
   min-width: 0;
   max-width: 100%;
@@ -55,10 +56,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
-  background-color: #fff;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  padding: 0.5rem;
+  background: transparent;
 }
 
 .latex-preview-content {
@@ -67,7 +66,7 @@
   justify-content: center;
 }
 
-/* HTML Preview container */
+/* HTML Preview */
 .html-preview-container {
   overflow: auto;
   max-height: 100%;
@@ -75,48 +74,35 @@
   border-radius: 4px;
   padding: 12px;
   background-color: #fff;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* HTML Preview iframe improvements */
+/* HTML Preview iframe */
 .html-preview-iframe {
   padding: 0;
   box-sizing: border-box;
   background-color: white;
 }
 
-.preview-device-content {
-  flex: 1;
-  overflow: hidden;
-  background: white;
-  padding: 0 8px 0 0; /* Add a bit of right padding to the container */
-}
-
-/* Ensure content inside preview has good margins */
-.preview-device-content iframe {
-  margin: 0;
-  padding: 0;
-}
-
-/* HTML Preview device frame */
+/* Device frame for preview */
 .preview-device-frame {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   background-color: white;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e9ecef;
 }
 
 .preview-device-header {
-  background: linear-gradient(to right, #f0f4f8, #edf2f7);
+  background: #f8f9fa;
   padding: 8px 12px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .preview-device-controls {
@@ -133,20 +119,20 @@
 }
 
 .preview-device-controls span:nth-child(1) {
-  background-color: #f56565;
+  background-color: #ff6b6b;
 }
 
 .preview-device-controls span:nth-child(2) {
-  background-color: #f6ad55;
+  background-color: #fcc419;
 }
 
 .preview-device-controls span:nth-child(3) {
-  background-color: #48bb78;
+  background-color: #51cf66;
 }
 
 .preview-device-title {
   font-size: 0.85rem;
-  color: #64748b;
+  color: #495057;
   text-align: center;
   flex: 1;
 }
@@ -157,7 +143,7 @@
   background: white;
 }
 
-/* Mixed content preview styles */
+/* Mixed content rendering */
 .preview-mixed-content {
   display: block;
   width: 100%;
@@ -169,14 +155,19 @@
   padding: 0 0.2em;
 }
 
+/* Code blocks */
 pre {
   white-space: pre-wrap;
   word-break: keep-all;
   overflow-x: auto;
   max-width: 100%;
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 0.75rem;
+  font-size: 0.9rem;
 }
 
-/* Subscript and superscript styling */
+/* Sub & superscript */
 sub,
 .subscript {
   vertical-align: sub;
@@ -191,7 +182,7 @@ sup,
   line-height: 0;
 }
 
-/* Better KaTeX styling */
+/* KaTeX styling */
 .katex {
   font-size: 1.1em !important;
 }
@@ -218,46 +209,43 @@ sup,
   margin-left: 0.15em !important;
 }
 
-/* Force spaces to be more visible */
 .katex .mspace:not(.mthinspace):not(.mmediumspace):not(.mthickspace) {
   width: 0.3em !important;
 }
 
-/* Toolbar enhancements */
+/* Toolbar buttons */
 .symbol-button {
   transition: all 0.2s;
-}
-.symbol-button:hover {
-  transform: scale(1.1);
+  border: 1px solid #e9ecef;
+  background: #fff;
 }
 
-/* Navigation transitions */
+.symbol-button:hover {
+  background: #f8f9fa;
+  border-color: #dee2e6;
+  transform: translateY(-1px);
+}
+
+/* Navigation effects */
 .fade-enter {
   opacity: 0;
 }
 .fade-enter-active {
   opacity: 1;
-  transition: opacity 300ms;
+  transition: opacity 200ms;
 }
 .fade-exit {
   opacity: 1;
 }
 .fade-exit-active {
   opacity: 0;
-  transition: opacity 300ms;
+  transition: opacity 200ms;
 }
 
-/* Active tab indication */
-.nav-tab-active {
-  background-color: #4f46e5;
-  color: white;
-  font-weight: 600;
-}
-
-/* Animation for page transitions */
+/* Page transitions */
 @keyframes slideIn {
   from {
-    transform: translateY(10px);
+    transform: translateY(6px);
     opacity: 0;
   }
   to {
@@ -267,5 +255,26 @@ sup,
 }
 
 .panel-animation {
-  animation: slideIn 0.3s ease-out forwards;
+  animation: slideIn 0.25s ease-out forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .resize-handle .handle-line {
+    width: 3px;
+    height: 24px;
+  }
+
+  [data-panel-group-direction="vertical"] .handle-line {
+    width: 24px;
+    height: 3px;
+  }
+
+  .preview-device-header {
+    padding: 5px 8px;
+  }
+
+  .preview-device-title {
+    font-size: 0.75rem;
+  }
 }
