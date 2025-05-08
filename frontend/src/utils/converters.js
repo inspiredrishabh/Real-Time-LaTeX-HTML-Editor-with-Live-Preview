@@ -142,7 +142,7 @@ export function convertToHTML(latexCode) {
     // Dekho math delimiters hain ya nahi
     const hasMathDelimiters = /\$.*?\$/.test(content);
 
-    // HTML ka basic structure
+    // HTML ka basic structure with improved padding
     const htmlStart = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -153,19 +153,22 @@ export function convertToHTML(latexCode) {
     body { 
       font-family: "Computer Modern", serif;
       line-height: 1.6;
-      padding: 0em;
+      padding: 0.5em;
       margin: 0em;
+      max-width: 800px;
+      margin: 0 auto;
     }
     p {
       margin: 0.8em 0;
       text-align: justify;
+      padding-right: 1.5em; /* Added right padding for paragraphs */
     }
     .math { 
       text-align: center; 
       margin: 1em 0;
       font-size: 1.2em;
       overflow-x: auto;
-      padding: 0.5em 0;
+      padding: 0.5em 1.5em 0.5em 0; /* Added right padding for math */
     }
     .math-inline { 
       padding: 0 0.2em; 
@@ -186,6 +189,7 @@ export function convertToHTML(latexCode) {
     .katex-display {
       overflow-x: auto;
       overflow-y: hidden;
+      padding-right: 1em; /* Added right padding for KaTeX displays */
     }
     .katex-html {
       white-space: normal !important;
